@@ -48,7 +48,7 @@ const translations = {
     minimalist: 'Minimalista',
     generateCover: 'Genera Copertina',
     generatingCover: 'Generazione Copertina...',
-    coverGenerationInfo: 'Usa il titolo e le parole chiave per generare una copertina unica per il tuo libro.',
+    coverGenerationInfo: 'Genera copertine professionali ottimizzate per Amazon basate sui bestseller della categoria selezionata.',
   },
   en: {
     research: 'Research',
@@ -96,7 +96,7 @@ const translations = {
     minimalist: 'Minimalist',
     generateCover: 'Generate Cover',
     generatingCover: 'Generating Cover...',
-    coverGenerationInfo: 'Use the title and keywords to generate a unique cover for your book.',
+    coverGenerationInfo: 'Generate professional Amazon-optimized covers based on bestsellers in the selected category.',
   }
 };
 

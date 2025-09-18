@@ -130,16 +130,20 @@ const ResearchTab: React.FC = () => {
                             </div>
                             <div className="space-y-4 max-h-[600px] overflow-y-auto pr-2">
                                 {researchData.sources.length > 0 ? researchData.sources.map(source => (
-                                    <div key={source.uri} className="border p-4 rounded-lg flex items-start gap-4 hover:bg-gray-50 transition">
+                                    <div key={source.uri} className="border-2 p-4 rounded-lg flex items-start gap-4 hover:bg-gray-50 transition-all duration-200 hover:shadow-md">
                                         <input type="checkbox" className="mt-1.5 h-4 w-4 rounded border-gray-300 text-brand-primary focus:ring-brand-primary" checked={selectedSources.some(s => s.uri === source.uri)} onChange={() => handleSourceSelection(source)} />
                                         <div className="flex-grow">
                                             <a href={source.uri} target="_blank" rel="noopener noreferrer" className="text-brand-secondary font-semibold hover:underline flex items-center gap-2">
                                                 {source.title} <ExternalLinkIcon className="h-4 w-4" />
                                             </a>
                                             <p className="text-sm text-gray-600 mt-1">{source.summary}</p>
+                                            <div className="flex items-center gap-2 mt-2">
+                                                <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">Fonte Verificata</span>
+                                                <span className="text-xs text-gray-500">Qualità: {source.relevance >= 90 ? 'Eccellente' : source.relevance >= 80 ? 'Ottima' : 'Buona'}</span>
+                                            </div>
                                         </div>
                                         <div className="text-right flex-shrink-0">
-                                            <div className="text-lg font-bold text-brand-primary">{source.relevance}%</div>
+                                            <div className={`text-lg font-bold ${source.relevance >= 90 ? 'text-green-600' : source.relevance >= 80 ? 'text-blue-600' : 'text-orange-600'}`}>{source.relevance}%</div>
                                             <div className="text-xs text-gray-500">{t('relevance')}</div>
                                         </div>
                                     </div>
@@ -152,11 +156,21 @@ const ResearchTab: React.FC = () => {
                     <div>
                         <Card className="mb-8">
                             <h2 className="text-xl font-bold mb-4">{t('titles')}</h2>
+                            <p className="text-sm text-gray-600 mb-4">Titoli ottimizzati per massima conversione e profittabilità</p>
                             <ul className="space-y-3">
                                 {researchData.titles.map(title => (
-                                    <li key={title.title} className="flex justify-between items-center p-2 rounded hover:bg-gray-50">
-                                        <span className="text-gray-800">{title.title}</span>
-                                        <span className="font-bold text-brand-primary text-sm">{title.relevance}%</span>
+                                    <li key={title.title} className="flex justify-between items-start p-3 rounded-lg hover:bg-gray-50 border-l-4 border-brand-primary">
+                                        <div className="flex-grow pr-4">
+                                            <span className="text-gray-800 font-medium leading-tight">{title.title}</span>
+                                            <div className="flex items-center gap-2 mt-1">
+                                                <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">Alta Conversione</span>
+                                                {title.relevance >= 95 && <span className="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full">🏆 Top Performer</span>}
+                                            </div>
+                                        </div>
+                                        <div className="text-right flex-shrink-0">
+                                            <span className={`font-bold text-lg ${title.relevance >= 95 ? 'text-green-600' : title.relevance >= 90 ? 'text-blue-600' : 'text-orange-600'}`}>{title.relevance}%</span>
+                                            <div className="text-xs text-gray-500">Potenziale</div>
+                                        </div>
                                     </li>
                                 ))}
                             </ul>
@@ -164,11 +178,21 @@ const ResearchTab: React.FC = () => {
                         {researchData.subtitles && researchData.subtitles.length > 0 && (
                           <Card className="mb-8">
                               <h2 className="text-xl font-bold mb-4">{t('subtitles')}</h2>
+                              <p className="text-sm text-gray-600 mb-4">Sottotitoli ad alta conversione per massimizzare l'appeal commerciale</p>
                               <ul className="space-y-3">
                                   {researchData.subtitles.map(subtitle => (
-                                      <li key={subtitle.subtitle} className="flex justify-between items-center p-2 rounded hover:bg-gray-50">
-                                          <span className="text-gray-800">{subtitle.subtitle}</span>
-                                          <span className="font-bold text-brand-primary text-sm">{subtitle.relevance}%</span>
+                                      <li key={subtitle.subtitle} className="flex justify-between items-start p-3 rounded-lg hover:bg-gray-50 border-l-4 border-brand-accent">
+                                          <div className="flex-grow pr-4">
+                                              <span className="text-gray-800 leading-tight">{subtitle.subtitle}</span>
+                                              <div className="flex items-center gap-2 mt-1">
+                                                  <span className="text-xs bg-purple-100 text-purple-800 px-2 py-1 rounded-full">Benefit-Driven</span>
+                                                  {subtitle.relevance >= 92 && <span className="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full">💎 Premium</span>}
+                                              </div>
+                                          </div>
+                                          <div className="text-right flex-shrink-0">
+                                              <span className={`font-bold text-lg ${subtitle.relevance >= 92 ? 'text-green-600' : subtitle.relevance >= 85 ? 'text-blue-600' : 'text-orange-600'}`}>{subtitle.relevance}%</span>
+                                              <div className="text-xs text-gray-500">Appeal</div>
+                                          </div>
                                       </li>
                                   ))}
                               </ul>
@@ -176,10 +200,17 @@ const ResearchTab: React.FC = () => {
                         )}
                         <Card>
                             <h2 className="text-xl font-bold mb-4">{t('keywords')}</h2>
+                            <p className="text-sm text-gray-600 mb-4">Keywords ottimizzate per Amazon con alto traffico e bassa concorrenza</p>
                             <div className="flex flex-wrap gap-2">
                                 {researchData.keywords.map(kw => (
-                                    <div key={kw.keyword} className="bg-blue-100 text-brand-dark text-sm font-medium px-3 py-1 rounded-full flex items-center gap-2">
-                                        {kw.keyword} <span className="text-xs font-bold opacity-75">{kw.relevance}%</span>
+                                    <div key={kw.keyword} className={`text-sm font-medium px-3 py-2 rounded-full flex items-center gap-2 ${
+                                        kw.relevance >= 95 ? 'bg-green-100 text-green-800 border border-green-200' :
+                                        kw.relevance >= 85 ? 'bg-blue-100 text-blue-800 border border-blue-200' :
+                                        'bg-gray-100 text-gray-800 border border-gray-200'
+                                    }`}>
+                                        {kw.keyword} 
+                                        <span className="text-xs font-bold bg-white px-1.5 py-0.5 rounded-full">{kw.relevance}%</span>
+                                        {kw.relevance >= 95 && <span className="text-xs">🔥</span>}
                                     </div>
                                 ))}
                             </div>

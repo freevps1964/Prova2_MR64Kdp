@@ -44,14 +44,17 @@ const Header: React.FC = () => {
         {/* Left Side: Logo and Title */}
         <div className="flex items-center gap-4">
           <img src={logoSrc} alt="eMMeRReKDP Logo" className="h-12 w-12 object-contain" />
-          <h1 className="text-2xl font-bold text-neutral-dark hidden sm:block">MR64Kdp Book</h1>
+          <div className="hidden sm:block">
+            <h1 className="text-2xl font-bold text-neutral-dark">eMMeRReKDP</h1>
+            <p className="text-sm text-gray-600 -mt-1">Book Creation</p>
+          </div>
         </div>
 
         {/* Middle: Project Controls */}
         <div className="flex-grow mx-4 sm:mx-8">
           {isProjectStarted ? (
             <div className="flex items-center gap-4">
-              <h2 className="text-lg sm:text-xl font-semibold text-brand-dark break-words flex-1" title={projectTitle}>
+              <h2 className="text-lg sm:text-xl font-semibold text-brand-dark break-words flex-1 leading-tight" title={projectTitle} style={{ lineHeight: '1.2' }}>
                 {projectTitle}
               </h2>
               <div className="w-1/3 min-w-[150px]">

@@ -40,24 +40,81 @@ const MOCK_RESEARCH_RESULT: ResearchResult = {
 export const performResearch = async (topic: string, language: string = 'italian'): Promise<ResearchResult> => {
   if (!ai) {
     console.log("Using mock data for research.");
-    return new Promise(resolve => setTimeout(() => resolve(MOCK_RESEARCH_RESULT), 1500));
+    // Enhanced mock data with better relevance and more sources
+    const enhancedMockData: ResearchResult = {
+      sources: [
+        { title: "Amazon KDP Complete Publishing Guide 2024", uri: "https://kdp.amazon.com/en_US/help", summary: "Official Amazon KDP comprehensive guide covering all aspects of self-publishing, from manuscript preparation to marketing strategies.", relevance: 98 },
+        { title: "Self-Publishing Success: KDP Mastery Course", uri: "https://example.com/kdp-mastery", summary: "Advanced strategies for maximizing KDP success, including keyword optimization and cover design best practices.", relevance: 95 },
+        { title: "KDP Royalty Calculator and Pricing Strategies", uri: "https://example.com/kdp-royalties-advanced", summary: "In-depth analysis of KDP royalty structures and optimal pricing strategies for maximum profitability.", relevance: 92 },
+        { title: "Amazon Algorithm Optimization for KDP Authors", uri: "https://example.com/amazon-algorithm-kdp", summary: "How to optimize your book listings to rank higher in Amazon's search results and increase visibility.", relevance: 89 },
+        { title: "KDP Marketing Blueprint: From Zero to Bestseller", uri: "https://example.com/kdp-marketing-blueprint", summary: "Comprehensive marketing strategies specifically designed for KDP authors to achieve bestseller status.", relevance: 86 },
+        { title: "Professional Book Formatting for KDP Success", uri: "https://example.com/kdp-formatting-pro", summary: "Advanced formatting techniques that ensure your book meets KDP standards and looks professional.", relevance: 83 },
+        { title: "KDP Category Selection and Keyword Research", uri: "https://example.com/kdp-categories-keywords", summary: "Strategic guide to selecting the most profitable categories and high-converting keywords for KDP.", relevance: 80 },
+        { title: "Cover Design Psychology for KDP Books", uri: "https://example.com/kdp-cover-psychology", summary: "Understanding the psychological principles behind effective book cover design for maximum sales conversion.", relevance: 77 },
+        { title: "KDP Analytics and Performance Tracking", uri: "https://example.com/kdp-analytics", summary: "How to use KDP analytics to optimize your book's performance and increase sales over time.", relevance: 74 },
+        { title: "International KDP Markets and Expansion", uri: "https://example.com/kdp-international", summary: "Strategies for expanding your KDP books to international markets and maximizing global reach.", relevance: 71 }
+      ],
+      titles: [
+        { title: "KDP Mastery 2024: La Guida Definitiva per Dominare Amazon e Generare Profitti Passivi", relevance: 98 },
+        { title: "Da Zero a Bestseller: Il Sistema Completo per il Successo su Amazon KDP", relevance: 96 },
+        { title: "Self-Publishing Milionario: Come Creare un Impero Editoriale su KDP", relevance: 94 },
+        { title: "Amazon KDP Secrets: Strategie Avanzate per Autori di Successo", relevance: 92 },
+        { title: "Il Metodo KDP: Trasforma la Tua Passione in Profitto Garantito", relevance: 90 },
+        { title: "KDP Power System: La Formula Segreta dei Top Seller Amazon", relevance: 88 },
+        { title: "Pubblicare e Vendere su Amazon: La Guida Pratica al KDP", relevance: 86 },
+        { title: "Self-Publishing Vincente: Dalla Scrittura al Successo Commerciale", relevance: 84 },
+        { title: "Amazon KDP Blueprint: Il Piano d'Azione per il Successo", relevance: 82 },
+        { title: "KDP Revolution: Come Rivoluzionare la Tua Carriera di Autore", relevance: 80 }
+      ],
+      subtitles: [
+        { subtitle: "La guida step-by-step per trasformare le tue idee in bestseller Amazon e generare rendite passive", relevance: 96 },
+        { subtitle: "Strategie comprovate, segreti degli esperti e tecniche avanzate per dominare il mercato KDP", relevance: 94 },
+        { subtitle: "Come creare, pubblicare e vendere libri di successo anche senza esperienza precedente", relevance: 92 },
+        { subtitle: "Il sistema completo per massimizzare i profitti e raggiungere la libertà finanziaria", relevance: 90 },
+        { subtitle: "Dalla ricerca delle nicchie profittevoli alla creazione di un business editoriale automatizzato", relevance: 88 },
+        { subtitle: "Tecniche segrete per ottimizzare ranking, aumentare le vendite e battere la concorrenza", relevance: 86 },
+        { subtitle: "La formula testata per creare libri ad alta conversione che vendono automaticamente", relevance: 84 },
+        { subtitle: "Come sfruttare l'intelligenza artificiale e gli strumenti avanzati per il successo KDP", relevance: 82 }
+      ],
+      keywords: [
+        { keyword: "amazon kdp", relevance: 100 },
+        { keyword: "self publishing", relevance: 98 },
+        { keyword: "pubblicare libro amazon", relevance: 96 },
+        { keyword: "kdp guida completa", relevance: 94 },
+        { keyword: "bestseller amazon", relevance: 92 },
+        { keyword: "self publishing italia", relevance: 90 },
+        { keyword: "come pubblicare libro", relevance: 88 },
+        { keyword: "kdp marketing", relevance: 86 },
+        { keyword: "amazon book publishing", relevance: 84 },
+        { keyword: "kdp royalties", relevance: 82 },
+        { keyword: "libro digitale amazon", relevance: 80 },
+        { keyword: "kdp formatting", relevance: 78 },
+        { keyword: "amazon author", relevance: 76 },
+        { keyword: "kdp cover design", relevance: 74 },
+        { keyword: "passive income books", relevance: 72 }
+      ]
+    };
+    return new Promise(resolve => setTimeout(() => resolve(enhancedMockData), 1500));
   }
 
   try {
-    const prompt = `Act as a self-publishing expert and marketing strategist. Conduct extensive research on the topic: "${topic}".
+    const prompt = `Act as a world-class self-publishing expert, marketing strategist, and Amazon KDP specialist with 10+ years of experience. Conduct comprehensive, highly targeted research on the topic: "${topic}".
     Your goal is to gather information to write a highly profitable, high-conversion book for Amazon KDP.
-    All generated content MUST be strictly and directly pertinent to the requested topic.
+    All generated content MUST be strictly and directly pertinent to the requested topic and optimized for maximum commercial success.
 
-    1.  Use Google Search to find highly relevant, authoritative sources (articles, guides, studies).
-    2.  Based on the search, suggest highly profitable, high-conversion book titles designed to grab attention and drive sales on Amazon.
-    3.  Based on the most relevant keywords, suggest compelling, high-conversion subtitles that clearly communicate the book's value proposition and promise a solution to the reader's problem.
-    4.  Based on the search and simulating Amazon's own data, suggest high-traffic, relevant keywords.
-    5.  Evaluate the relevance and commercial potential of each source, title, subtitle, and keyword on a scale of 0-100.
-    6.  Filter out any sources with a relevance below 60%.
+    CRITICAL REQUIREMENTS:
+    1. Use Google Search to find the most authoritative, high-quality sources (official guides, expert articles, case studies, bestseller analysis).
+    2. Generate 10 highly profitable, conversion-optimized book titles that follow proven Amazon bestseller patterns and psychological triggers.
+    3. Create 8 compelling, benefit-driven subtitles that promise clear value and solutions to specific problems.
+    4. Research and suggest 15 high-traffic, low-competition keywords based on Amazon's search data and trends.
+    5. Evaluate each element on commercial potential and relevance (0-100 scale).
+    6. MANDATORY: Filter out any sources below 70% relevance (only premium sources).
     7.  Provide all responses in ${language}.
-    8.  Return ONLY a single valid JSON object that matches this structure, with no other text, markdown, or explanation before or after it:
+    8. Focus on titles and subtitles that use power words, urgency, and clear benefit statements.
+    9. Ensure keywords are Amazon-optimized and include both broad and long-tail variations.
+    10. Return ONLY a single valid JSON object that matches this structure, with no other text, markdown, or explanation before or after it:
     {
-      "sources": [{ "title": "string", "uri": "string", "summary": "string", "relevance": "number (60-100)" }],
+      "sources": [{ "title": "string", "uri": "string", "summary": "string", "relevance": "number (70-100)" }],
       "titles": [{ "title": "string", "relevance": "number (0-100)" }],
       "subtitles": [{ "subtitle": "string", "relevance": "number (0-100)" }],
       "keywords": [{ "keyword": "string", "relevance": "number (0-100)" }]
@@ -202,32 +259,55 @@ export const generateChapterContent = async (chapterTitle: string, selectedSourc
 export const generateCoverImages = async (title: string, keywords: Keyword[]): Promise<string[]> => {
     if (!ai) {
         console.log("Using mock data for cover image.");
-        const mockSvgs = Array(3).fill(0).map((_, i) => `<svg width="512" height="768" xmlns="http://www.w3.org/2000/svg"><rect width="100%" height="100%" fill="#cccccc"/><text x="50%" y="50%" font-family="sans-serif" font-size="24" fill="black" text-anchor="middle" dominant-baseline="middle" style="white-space: pre-wrap;">Copertina ${i+1} per "${title}"</text></svg>`);
+        const mockSvgs = Array(4).fill(0).map((_, i) => {
+            const colors = ['#1E40AF', '#DC2626', '#059669', '#7C3AED'];
+            const bgColors = ['#F8FAFC', '#FEF2F2', '#F0FDF4', '#FAF5FF'];
+            return `<svg width="512" height="768" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="grad${i}" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:${colors[i]};stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:${bgColors[i]};stop-opacity:1" />
+                    </linearGradient>
+                </defs>
+                <rect width="100%" height="100%" fill="url(#grad${i})"/>
+                <rect x="40" y="60" width="432" height="200" fill="rgba(255,255,255,0.9)" rx="10"/>
+                <text x="256" y="140" font-family="Arial, sans-serif" font-size="28" font-weight="bold" fill="${colors[i]}" text-anchor="middle" dominant-baseline="middle">BESTSELLER</text>
+                <text x="256" y="180" font-family="Arial, sans-serif" font-size="16" fill="${colors[i]}" text-anchor="middle" dominant-baseline="middle">Design ${i+1}</text>
+                <rect x="40" y="300" width="432" height="300" fill="rgba(255,255,255,0.8)" rx="10"/>
+                <text x="256" y="450" font-family="Arial, sans-serif" font-size="20" font-weight="bold" fill="#333" text-anchor="middle" dominant-baseline="middle" style="white-space: pre-wrap;">${title.substring(0, 40)}...</text>
+                <text x="60" y="720" font-family="Arial, sans-serif" font-size="12" fill="${colors[i]}" font-weight="bold">eMMeRReKDP</text>
+            </svg>`;
+        });
         return mockSvgs.map(svg => `data:image/svg+xml;base64,${btoa(svg)}`);
     }
 
     try {
         const keywordString = keywords.map(k => k.keyword).slice(0, 5).join(', ');
-        const prompt = `Create three distinct, professional, and highly marketable book cover designs for a book titled "${title}". The main themes and keywords are: ${keywordString}.
+        const prompt = `Create four distinct, professional, and highly marketable book cover designs for a book titled "${title}". The main themes and keywords are: ${keywordString}.
 
-        **Crucial Guideline:** Analyze the current design trends of best-selling books on Amazon, which can be seen at this link: https://www.amazon.com/gp/bestsellers/books/
+        **CRITICAL DESIGN REQUIREMENTS:**
+        Study and emulate the visual patterns of Amazon's current bestselling books: https://www.amazon.com/gp/bestsellers/books/
         
-        Your generated covers must emulate the quality and style of these best-sellers. Pay close attention to:
-        - **Visual Impact:** Create a strong, memorable focal point.
-        - **Color Palette:** Use color schemes that are common in the target genre and evoke the right emotion.
-        - **Typography:** While you should not add the title text yourself, the overall design should leave clear, professional space for typography to be added later. The design should feel complete even without text.
-        - **Marketability:** The designs must look professional and stand out in a crowded marketplace like Amazon KDP.
+        **MANDATORY DESIGN ELEMENTS:**
+        1. **Background Theme:** Create a unique, professional background that matches bestselling book trends in the relevant category
+        2. **Visual Hierarchy:** Design clear spaces for title (top 1/3), subtitle (middle), and author name (bottom)
+        3. **Color Psychology:** Use colors that trigger purchasing decisions and genre expectations
+        4. **Professional Quality:** Match the visual quality of top-performing Amazon books
+        5. **Market Differentiation:** Stand out while fitting genre conventions
+        6. **Logo Placement:** Reserve bottom-left corner space for "eMMeRReKDP" logo
 
-        **Strict Constraints:**
-        - **DO NOT add any text** or letters to the image.
-        - The design should be symbolic, conceptual, and focus on powerful, central imagery.
-        - Generate three different concepts.`;
+        **ABSOLUTE CONSTRAINTS:**
+        - DO NOT include any text, titles, or letters in the design
+        - Focus on symbolic, conceptual imagery that supports the book's theme
+        - Create designs that work for both print and digital formats
+        - Generate four completely different visual concepts
+        - Each design must be immediately recognizable as a professional book cover`;
 
         const response = await ai.models.generateImages({
             model: 'imagen-4.0-generate-001',
             prompt: prompt,
             config: {
-              numberOfImages: 3,
+              numberOfImages: 4,
               outputMimeType: 'image/jpeg',
               aspectRatio: '3:4',
             },
