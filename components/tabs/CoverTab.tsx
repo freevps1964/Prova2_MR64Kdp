@@ -49,8 +49,16 @@ const CoverTab: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState('');
 
   const handleGenerateCover = async () => {
-    if (!projectTitle || !researchData?.keywords || researchData.keywords.length === 0) {
-      alert("Assicurati di avere un titolo e delle parole chiave generate nella scheda 'Ricerca'.");
+    if (!projectTitle.trim()) {
+      alert("È necessario un titolo di progetto per generare la copertina.");
+      return;
+    }
+    if (!researchData?.keywords || researchData.keywords.length === 0) {
+      alert("Esegui prima una ricerca nella scheda 'Ricerca' per ottenere le parole chiave necessarie.");
+      return;
+    }
+    if (!selectedCategory) {
+      alert("Seleziona una categoria Amazon per ottimizzare la copertina.");
       return;
     }
     setIsLoading(true);
@@ -96,15 +104,17 @@ const CoverTab: React.FC = () => {
           
           <button
             onClick={handleGenerateCover}
-            disabled={isLoading || !projectTitle || !researchData?.keywords}
+            disabled={isLoading || !projectTitle.trim() || !researchData?.keywords || !selectedCategory}
             className="w-full bg-gradient-to-r from-brand-primary to-brand-secondary text-white font-bold py-4 px-6 rounded-lg shadow-lg hover:shadow-xl transition duration-300 disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
             <SparklesIcon className="h-5 w-5" />
             {isLoading ? t('generatingCover') : t('generateCover')}
           </button>
           
-           {!projectTitle && <p className="text-red-500 text-xs mt-2 text-center">È necessario un titolo di progetto.</p>}
-           {projectTitle && !researchData?.keywords && <p className="text-red-500 text-xs mt-2 text-center">Esegui prima una ricerca per le parole chiave.</p>}
+           {!projectTitle.trim() && <p className="text-red-500 text-xs mt-2 text-center">È necessario un titolo di progetto.</p>}
+           {projectTitle.trim() && !researchData?.keywords && <p className="text-red-500 text-xs mt-2 text-center">Esegui prima una ricerca per le parole chiave.</p>}
+           {projectTitle.trim() && researchData?.keywords && !selectedCategory && <p className="text-red-500 text-xs mt-2 text-center">Seleziona una categoria Amazon.</p>}
+           {projectTitle.trim() && researchData?.keywords && selectedCategory && <p className="text-green-600 text-xs mt-2 text-center">✓ Pronto per generare copertine ottimizzate</p>}
            
            <div className="bg-blue-50 p-4 rounded-lg">
              <h3 className="font-semibold text-blue-800 mb-2">Caratteristiche delle Copertine:</h3>

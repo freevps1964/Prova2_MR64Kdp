@@ -78,7 +78,17 @@ export const ProjectProvider: React.FC<{ children: ReactNode }> = ({ children })
   const handleNewResearchData = (data: ResearchResult | null) => {
     setResearchData(data);
     if (data?.keywords) {
+        // Auto-populate metadata with research results
         setMetadataKeywords(data.keywords);
+        
+        // Auto-suggest description based on top keywords and titles
+        if (data.titles.length > 0 && data.keywords.length > 0) {
+          const topKeywords = data.keywords.slice(0, 5).map(k => k.keyword).join(', ');
+          const suggestedDescription = `Una guida completa su ${topKeywords}. Questo libro fornisce strategie pratiche e tecniche avanzate per ottenere risultati concreti. Perfetto per chi vuole approfondire l'argomento e applicare immediatamente le conoscenze acquisite.`;
+          if (!description.trim()) {
+            setDescription(suggestedDescription);
+          }
+        }
     }
   };
 

@@ -22,8 +22,12 @@ const ContentTab: React.FC = () => {
     const [generationStatus, setGenerationStatus] = useState('');
     
     const handleGenerateContent = async () => {
-        if (!selectedItem || selectedSources.length === 0) {
-            alert("Seleziona un capitolo e assicurati di avere delle fonti di ricerca selezionate.");
+        if (!selectedItem) {
+            alert("Seleziona un capitolo o sottocapitolo per generare il contenuto.");
+            return;
+        }
+        if (selectedSources.length === 0) {
+            alert("Seleziona almeno una fonte di ricerca nella scheda 'Ricerca' prima di generare il contenuto.");
             return;
         }
         setIsLoading(true);
@@ -39,8 +43,12 @@ const ContentTab: React.FC = () => {
     };
     
     const handleGenerateAllContent = async () => {
-        if (!bookStructure || selectedSources.length === 0) {
-            alert("Assicurati di avere una struttura e delle fonti di ricerca selezionate.");
+        if (!bookStructure) {
+            alert("Genera prima una struttura del libro nella scheda 'Struttura'.");
+            return;
+        }
+        if (selectedSources.length === 0) {
+            alert("Seleziona almeno una fonte di ricerca nella scheda 'Ricerca' prima di generare i contenuti.");
             return;
         }
         setIsGeneratingAll(true);
@@ -135,6 +143,7 @@ const ContentTab: React.FC = () => {
                                 </div>
                             </div>
                              {selectedSources.length === 0 && <p className="text-red-500 text-xs mb-2 text-right">Seleziona almeno una fonte nella scheda 'Ricerca'.</p>}
+                             {selectedSources.length > 0 && <p className="text-green-600 text-xs mb-2 text-right">✓ {selectedSources.length} fonti selezionate</p>}
                              {isGeneratingAll && <p className="text-blue-600 text-sm mb-2 text-center animate-pulse">{generationStatus}</p>}
                             <div className="flex-grow relative">
                             {(isLoading || isGeneratingAll) && (

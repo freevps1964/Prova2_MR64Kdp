@@ -40,78 +40,26 @@ const MOCK_RESEARCH_RESULT: ResearchResult = {
 export const performResearch = async (topic: string, language: string = 'italian'): Promise<ResearchResult> => {
   if (!ai) {
     console.log("Using mock data for research.");
-    // Enhanced mock data with better relevance and more sources
-    const enhancedMockData: ResearchResult = {
-      sources: [
-        { title: "Amazon KDP Complete Publishing Guide 2024", uri: "https://kdp.amazon.com/en_US/help", summary: "Official Amazon KDP comprehensive guide covering all aspects of self-publishing, from manuscript preparation to marketing strategies.", relevance: 98 },
-        { title: "Self-Publishing Success: KDP Mastery Course", uri: "https://example.com/kdp-mastery", summary: "Advanced strategies for maximizing KDP success, including keyword optimization and cover design best practices.", relevance: 95 },
-        { title: "KDP Royalty Calculator and Pricing Strategies", uri: "https://example.com/kdp-royalties-advanced", summary: "In-depth analysis of KDP royalty structures and optimal pricing strategies for maximum profitability.", relevance: 92 },
-        { title: "Amazon Algorithm Optimization for KDP Authors", uri: "https://example.com/amazon-algorithm-kdp", summary: "How to optimize your book listings to rank higher in Amazon's search results and increase visibility.", relevance: 89 },
-        { title: "KDP Marketing Blueprint: From Zero to Bestseller", uri: "https://example.com/kdp-marketing-blueprint", summary: "Comprehensive marketing strategies specifically designed for KDP authors to achieve bestseller status.", relevance: 86 },
-        { title: "Professional Book Formatting for KDP Success", uri: "https://example.com/kdp-formatting-pro", summary: "Advanced formatting techniques that ensure your book meets KDP standards and looks professional.", relevance: 83 },
-        { title: "KDP Category Selection and Keyword Research", uri: "https://example.com/kdp-categories-keywords", summary: "Strategic guide to selecting the most profitable categories and high-converting keywords for KDP.", relevance: 80 },
-        { title: "Cover Design Psychology for KDP Books", uri: "https://example.com/kdp-cover-psychology", summary: "Understanding the psychological principles behind effective book cover design for maximum sales conversion.", relevance: 77 },
-        { title: "KDP Analytics and Performance Tracking", uri: "https://example.com/kdp-analytics", summary: "How to use KDP analytics to optimize your book's performance and increase sales over time.", relevance: 74 },
-        { title: "International KDP Markets and Expansion", uri: "https://example.com/kdp-international", summary: "Strategies for expanding your KDP books to international markets and maximizing global reach.", relevance: 71 }
-      ],
-      titles: [
-        { title: "KDP Mastery 2024: La Guida Definitiva per Dominare Amazon e Generare Profitti Passivi", relevance: 98 },
-        { title: "Da Zero a Bestseller: Il Sistema Completo per il Successo su Amazon KDP", relevance: 96 },
-        { title: "Self-Publishing Milionario: Come Creare un Impero Editoriale su KDP", relevance: 94 },
-        { title: "Amazon KDP Secrets: Strategie Avanzate per Autori di Successo", relevance: 92 },
-        { title: "Il Metodo KDP: Trasforma la Tua Passione in Profitto Garantito", relevance: 90 },
-        { title: "KDP Power System: La Formula Segreta dei Top Seller Amazon", relevance: 88 },
-        { title: "Pubblicare e Vendere su Amazon: La Guida Pratica al KDP", relevance: 86 },
-        { title: "Self-Publishing Vincente: Dalla Scrittura al Successo Commerciale", relevance: 84 },
-        { title: "Amazon KDP Blueprint: Il Piano d'Azione per il Successo", relevance: 82 },
-        { title: "KDP Revolution: Come Rivoluzionare la Tua Carriera di Autore", relevance: 80 }
-      ],
-      subtitles: [
-        { subtitle: "La guida step-by-step per trasformare le tue idee in bestseller Amazon e generare rendite passive", relevance: 96 },
-        { subtitle: "Strategie comprovate, segreti degli esperti e tecniche avanzate per dominare il mercato KDP", relevance: 94 },
-        { subtitle: "Come creare, pubblicare e vendere libri di successo anche senza esperienza precedente", relevance: 92 },
-        { subtitle: "Il sistema completo per massimizzare i profitti e raggiungere la libertà finanziaria", relevance: 90 },
-        { subtitle: "Dalla ricerca delle nicchie profittevoli alla creazione di un business editoriale automatizzato", relevance: 88 },
-        { subtitle: "Tecniche segrete per ottimizzare ranking, aumentare le vendite e battere la concorrenza", relevance: 86 },
-        { subtitle: "La formula testata per creare libri ad alta conversione che vendono automaticamente", relevance: 84 },
-        { subtitle: "Come sfruttare l'intelligenza artificiale e gli strumenti avanzati per il successo KDP", relevance: 82 }
-      ],
-      keywords: [
-        { keyword: "amazon kdp", relevance: 100 },
-        { keyword: "self publishing", relevance: 98 },
-        { keyword: "pubblicare libro amazon", relevance: 96 },
-        { keyword: "kdp guida completa", relevance: 94 },
-        { keyword: "bestseller amazon", relevance: 92 },
-        { keyword: "self publishing italia", relevance: 90 },
-        { keyword: "come pubblicare libro", relevance: 88 },
-        { keyword: "kdp marketing", relevance: 86 },
-        { keyword: "amazon book publishing", relevance: 84 },
-        { keyword: "kdp royalties", relevance: 82 },
-        { keyword: "libro digitale amazon", relevance: 80 },
-        { keyword: "kdp formatting", relevance: 78 },
-        { keyword: "amazon author", relevance: 76 },
-        { keyword: "kdp cover design", relevance: 74 },
-        { keyword: "passive income books", relevance: 72 }
-      ]
-    };
+    // Generate topic-specific mock data
+    const enhancedMockData = generateTopicSpecificMockData(topic);
     return new Promise(resolve => setTimeout(() => resolve(enhancedMockData), 1500));
   }
 
   try {
     const prompt = `Act as a world-class self-publishing expert, marketing strategist, and Amazon KDP specialist with 10+ years of experience. Conduct comprehensive, highly targeted research on the topic: "${topic}".
     Your goal is to gather information to write a highly profitable, high-conversion book for Amazon KDP.
-    All generated content MUST be strictly and directly pertinent to the requested topic and optimized for maximum commercial success.
+    All generated content MUST be strictly and directly pertinent to the specific topic "${topic}" and optimized for maximum commercial success.
 
     CRITICAL REQUIREMENTS:
-    1. Use Google Search to find the most authoritative, high-quality sources (official guides, expert articles, case studies, bestseller analysis).
-    2. Generate 10 highly profitable, conversion-optimized book titles that follow proven Amazon bestseller patterns and psychological triggers.
-    3. Create 8 compelling, benefit-driven subtitles that promise clear value and solutions to specific problems.
-    4. Research and suggest 15 high-traffic, low-competition keywords based on Amazon's search data and trends.
+    1. Use Google Search to find the most authoritative, high-quality sources specifically about "${topic}" (official guides, expert articles, case studies, bestseller analysis).
+    2. Generate 10 highly profitable, conversion-optimized book titles that are DIRECTLY related to "${topic}" and follow proven Amazon bestseller patterns.
+    3. Create 8 compelling, benefit-driven subtitles that are specifically about "${topic}" and promise clear value and solutions to problems in this exact field.
+    4. Research and suggest 15 high-traffic, low-competition keywords that are DIRECTLY related to "${topic}" based on Amazon's search data and trends.
     5. Evaluate each element on commercial potential and relevance (0-100 scale).
     6. MANDATORY: Filter out any sources below 70% relevance (only premium sources).
     7.  Provide all responses in ${language}.
-    8. Focus on titles and subtitles that use power words, urgency, and clear benefit statements.
-    9. Ensure keywords are Amazon-optimized and include both broad and long-tail variations.
+    8. Focus on titles and subtitles that use power words, urgency, and clear benefit statements specifically related to "${topic}".
+    9. Ensure keywords are Amazon-optimized and include both broad and long-tail variations specifically about "${topic}".
     10. Return ONLY a single valid JSON object that matches this structure, with no other text, markdown, or explanation before or after it:
     {
       "sources": [{ "title": "string", "uri": "string", "summary": "string", "relevance": "number (70-100)" }],
@@ -158,6 +106,90 @@ export const performResearch = async (topic: string, language: string = 'italian
   }
 };
 
+// Generate topic-specific mock data for better relevance
+const generateTopicSpecificMockData = (topic: string): ResearchResult => {
+  const topicLower = topic.toLowerCase();
+  
+  // Base template that will be customized based on topic
+  let sources, titles, subtitles, keywords;
+  
+  if (topicLower.includes('cucina') || topicLower.includes('ricette') || topicLower.includes('cooking')) {
+    sources = [
+      { title: `Guida Completa alla ${topic}: Tecniche e Segreti dei Chef`, uri: "https://example.com/cooking-guide", summary: `Una guida approfondita su ${topic} con tecniche professionali e ricette innovative.`, relevance: 95 },
+      { title: `${topic}: Ricette Tradizionali e Moderne`, uri: "https://example.com/recipes", summary: `Raccolta di ricette tradizionali e moderne per ${topic}.`, relevance: 92 },
+      { title: `Nutrizione e ${topic}: Mangiare Sano e Gustoso`, uri: "https://example.com/nutrition", summary: `Come combinare ${topic} con principi nutrizionali per una alimentazione equilibrata.`, relevance: 88 }
+    ];
+    titles = [
+      { title: `${topic}: La Guida Definitiva per Diventare un Maestro in Cucina`, relevance: 98 },
+      { title: `Segreti di ${topic}: Ricette e Tecniche dei Grandi Chef`, relevance: 95 },
+      { title: `${topic} Perfetto: Dal Principiante all'Esperto in 30 Giorni`, relevance: 92 }
+    ];
+    keywords = [
+      { keyword: topic.toLowerCase(), relevance: 100 },
+      { keyword: `ricette ${topic.toLowerCase()}`, relevance: 95 },
+      { keyword: `come cucinare ${topic.toLowerCase()}`, relevance: 90 }
+    ];
+  } else if (topicLower.includes('fitness') || topicLower.includes('allenamento') || topicLower.includes('workout')) {
+    sources = [
+      { title: `Scienza dell'Allenamento per ${topic}`, uri: "https://example.com/fitness-science", summary: `Approccio scientifico all'allenamento per ${topic} basato su ricerche recenti.`, relevance: 96 },
+      { title: `${topic}: Programmi di Allenamento Personalizzati`, uri: "https://example.com/workout-programs", summary: `Programmi di allenamento specifici per ${topic} adatti a tutti i livelli.`, relevance: 93 },
+      { title: `Nutrizione Sportiva per ${topic}`, uri: "https://example.com/sports-nutrition", summary: `Guida completa alla nutrizione ottimale per chi pratica ${topic}.`, relevance: 89 }
+    ];
+    titles = [
+      { title: `${topic}: Il Sistema Completo per Trasformare il Tuo Corpo`, relevance: 97 },
+      { title: `Rivoluzione ${topic}: Risultati Garantiti in 90 Giorni`, relevance: 94 },
+      { title: `${topic} Avanzato: Tecniche Segrete dei Professionisti`, relevance: 91 }
+    ];
+    keywords = [
+      { keyword: topic.toLowerCase(), relevance: 100 },
+      { keyword: `allenamento ${topic.toLowerCase()}`, relevance: 96 },
+      { keyword: `programma ${topic.toLowerCase()}`, relevance: 92 }
+    ];
+  } else if (topicLower.includes('business') || topicLower.includes('marketing') || topicLower.includes('vendite')) {
+    sources = [
+      { title: `Strategie Avanzate di ${topic} per il 2024`, uri: "https://example.com/business-strategies", summary: `Le strategie più efficaci di ${topic} utilizzate dalle aziende di successo.`, relevance: 97 },
+      { title: `${topic} Digitale: Guida Pratica`, uri: "https://example.com/digital-business", summary: `Come applicare ${topic} nel mondo digitale per massimizzare i risultati.`, relevance: 94 },
+      { title: `Case Study di Successo in ${topic}`, uri: "https://example.com/case-studies", summary: `Analisi dettagliata di casi di successo nel campo di ${topic}.`, relevance: 90 }
+    ];
+    titles = [
+      { title: `${topic} Vincente: La Formula Segreta del Successo`, relevance: 98 },
+      { title: `Da Zero a Leader: Dominare il ${topic} in 12 Mesi`, relevance: 95 },
+      { title: `${topic} 4.0: Strategie Digitali per il Futuro`, relevance: 92 }
+    ];
+    keywords = [
+      { keyword: topic.toLowerCase(), relevance: 100 },
+      { keyword: `strategie ${topic.toLowerCase()}`, relevance: 97 },
+      { keyword: `corso ${topic.toLowerCase()}`, relevance: 93 }
+    ];
+  } else {
+    // Generic topic-specific content
+    sources = [
+      { title: `Guida Completa a ${topic}: Tutto Quello che Devi Sapere`, uri: "https://example.com/complete-guide", summary: `Una guida esaustiva su ${topic} che copre tutti gli aspetti fondamentali e avanzati.`, relevance: 94 },
+      { title: `${topic}: Tecniche e Strategie Avanzate`, uri: "https://example.com/advanced-techniques", summary: `Tecniche avanzate e strategie professionali per eccellere in ${topic}.`, relevance: 91 },
+      { title: `Il Futuro di ${topic}: Tendenze e Innovazioni`, uri: "https://example.com/future-trends", summary: `Analisi delle tendenze future e innovazioni nel campo di ${topic}.`, relevance: 87 }
+    ];
+    titles = [
+      { title: `${topic}: La Guida Definitiva per il Successo`, relevance: 96 },
+      { title: `Mastering ${topic}: Dalla Teoria alla Pratica`, relevance: 93 },
+      { title: `${topic} Avanzato: Segreti e Strategie dei Professionisti`, relevance: 90 }
+    ];
+    keywords = [
+      { keyword: topic.toLowerCase(), relevance: 100 },
+      { keyword: `guida ${topic.toLowerCase()}`, relevance: 95 },
+      { keyword: `corso ${topic.toLowerCase()}`, relevance: 90 }
+    ];
+  }
+  
+  // Generate topic-specific subtitles
+  subtitles = [
+    { subtitle: `La guida step-by-step per padroneggiare ${topic} e ottenere risultati straordinari`, relevance: 95 },
+    { subtitle: `Strategie comprovate e tecniche avanzate per eccellere in ${topic}`, relevance: 92 },
+    { subtitle: `Come trasformare la tua passione per ${topic} in successo concreto`, relevance: 89 }
+  ];
+  
+  return { sources, titles, subtitles, keywords };
+};
+
 export const generateBookStructure = async (title: string, sources: Source[]): Promise<BookStructure> => {
   if (!ai) {
     console.log("Using mock data for book structure.");
@@ -177,14 +209,21 @@ export const generateBookStructure = async (title: string, sources: Source[]): P
   }
   try {
     const sourceSummaries = sources.map(s => `- ${s.title}: ${s.summary}`).join('\n');
-    const prompt = `Act as an expert book editor. Your task is to create a detailed table of contents for a book titled "${title}".
+    const prompt = `Act as an expert book editor and content strategist. Your task is to create a detailed, logical table of contents for a book titled "${title}".
     Base the structure on the following research sources:
     ${sourceSummaries}
 
-    The structure should be logical, comprehensive, and well-organized, with clear chapters and relevant subchapters.
+    CRITICAL REQUIREMENTS:
+    - The structure must be directly related to the book title "${title}" and the research sources provided
+    - Create a logical progression that builds knowledge step by step
+    - Each chapter should flow naturally into the next
+    - Subchapters should be specific and actionable
+    
     - Create between 5 and 10 main chapters.
     - Each chapter should have between 2 and 5 subchapters.
     - The chapter and subchapter titles must be in Italian.
+    - Ensure the content structure matches what readers would expect from a book titled "${title}"
+    
     - Return ONLY a single valid JSON object that matches this structure, with no other text, markdown, or explanation:
     {
       "chapters": [
@@ -231,18 +270,58 @@ export const generateBookStructure = async (title: string, sources: Source[]): P
 
 export const generateChapterContent = async (chapterTitle: string, selectedSources: Source[]): Promise<string> => {
     if(!ai) {
-        return new Promise(resolve => setTimeout(() => resolve(`Questo è un capitolo di esempio generato per "${chapterTitle}". Il contenuto si baserebbe sulle fonti selezionate per fornire informazioni dettagliate e ben strutturate.`), 1000));
+        const mockContent = `# ${chapterTitle}
+
+Questo capitolo fornisce una guida completa su "${chapterTitle}", basandosi sulle migliori fonti di ricerca selezionate.
+
+## Introduzione
+
+In questo capitolo esploreremo in dettaglio tutti gli aspetti fondamentali di "${chapterTitle}", fornendo informazioni pratiche e actionable che potrai applicare immediatamente.
+
+## Concetti Fondamentali
+
+I concetti chiave che tratteremo includono:
+- Principi base e fondamenti teorici
+- Applicazioni pratiche nel mondo reale
+- Strategie avanzate per ottimizzare i risultati
+- Errori comuni da evitare
+
+## Strategie Pratiche
+
+Basandoci sulle fonti di ricerca selezionate, ecco le strategie più efficaci:
+
+1. **Approccio Sistematico**: Sviluppa un metodo strutturato per affrontare "${chapterTitle}"
+2. **Implementazione Graduale**: Applica le tecniche step-by-step per risultati ottimali
+3. **Monitoraggio e Ottimizzazione**: Traccia i progressi e ottimizza continuamente
+
+## Esempi Pratici
+
+Esempi concreti di applicazione delle tecniche discusse in questo capitolo, tratti dalle migliori pratiche del settore.
+
+## Conclusioni
+
+Questo capitolo ha fornito una base solida per comprendere e applicare "${chapterTitle}". Nel prossimo capitolo approfondiremo ulteriormente questi concetti.`;
+        
+        return new Promise(resolve => setTimeout(() => resolve(mockContent), 1000));
     }
 
     try {
         const sourceInfo = selectedSources.map(s => `- ${s.title}: ${s.summary.substring(0, 150)}...`).join('\n');
         
-        const prompt = `Act as an expert author. Write a detailed book chapter titled "${chapterTitle}".
+        const prompt = `Act as an expert author and subject matter expert. Write a comprehensive, detailed book chapter titled "${chapterTitle}".
         Use the following sources as your primary reference material:
         ${sourceInfo}
         
-        The chapter should be well-structured, informative, and engaging for the reader.
-        Write the chapter in Italian.`;
+        CRITICAL REQUIREMENTS:
+        - The chapter must be directly related to the title "${chapterTitle}"
+        - Content must be based on and reference the provided sources
+        - Structure the chapter with clear headings and subheadings
+        - Include practical examples and actionable advice
+        - Write in a professional yet accessible tone
+        - Aim for 1500-2000 words
+        - Include introduction, main content sections, and conclusion
+        - Write the entire chapter in Italian
+        - Make it engaging and valuable for readers interested in this specific topic`;
 
         const response = await ai.models.generateContent({
             model: 'gemini-2.5-flash',
@@ -262,6 +341,7 @@ export const generateCoverImages = async (title: string, keywords: Keyword[]): P
         const mockSvgs = Array(4).fill(0).map((_, i) => {
             const colors = ['#1E40AF', '#DC2626', '#059669', '#7C3AED'];
             const bgColors = ['#F8FAFC', '#FEF2F2', '#F0FDF4', '#FAF5FF'];
+            const titleWords = title.split(' ').slice(0, 3).join(' '); // First 3 words for better fit
             return `<svg width="512" height="768" xmlns="http://www.w3.org/2000/svg">
                 <defs>
                     <linearGradient id="grad${i}" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -274,7 +354,7 @@ export const generateCoverImages = async (title: string, keywords: Keyword[]): P
                 <text x="256" y="140" font-family="Arial, sans-serif" font-size="28" font-weight="bold" fill="${colors[i]}" text-anchor="middle" dominant-baseline="middle">BESTSELLER</text>
                 <text x="256" y="180" font-family="Arial, sans-serif" font-size="16" fill="${colors[i]}" text-anchor="middle" dominant-baseline="middle">Design ${i+1}</text>
                 <rect x="40" y="300" width="432" height="300" fill="rgba(255,255,255,0.8)" rx="10"/>
-                <text x="256" y="450" font-family="Arial, sans-serif" font-size="20" font-weight="bold" fill="#333" text-anchor="middle" dominant-baseline="middle" style="white-space: pre-wrap;">${title.substring(0, 40)}...</text>
+                <text x="256" y="450" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#333" text-anchor="middle" dominant-baseline="middle">${titleWords}</text>
                 <text x="60" y="720" font-family="Arial, sans-serif" font-size="12" fill="${colors[i]}" font-weight="bold">eMMeRReKDP</text>
             </svg>`;
         });
@@ -283,25 +363,29 @@ export const generateCoverImages = async (title: string, keywords: Keyword[]): P
 
     try {
         const keywordString = keywords.map(k => k.keyword).slice(0, 5).join(', ');
-        const prompt = `Create four distinct, professional, and highly marketable book cover designs for a book titled "${title}". The main themes and keywords are: ${keywordString}.
+        const prompt = `Create four distinct, professional, and highly marketable book cover designs specifically for a book titled "${title}". 
+        The book is about: ${keywordString}.
+        The cover designs must be directly related to the book's topic and target audience.
 
         **CRITICAL DESIGN REQUIREMENTS:**
-        Study and emulate the visual patterns of Amazon's current bestselling books: https://www.amazon.com/gp/bestsellers/books/
+        Study and emulate the visual patterns of Amazon's current bestselling books in the same category as "${title}".
         
         **MANDATORY DESIGN ELEMENTS:**
-        1. **Background Theme:** Create a unique, professional background that matches bestselling book trends in the relevant category
+        1. **Background Theme:** Create a unique, professional background that specifically relates to "${title}" and matches bestselling book trends
         2. **Visual Hierarchy:** Design clear spaces for title (top 1/3), subtitle (middle), and author name (bottom)
-        3. **Color Psychology:** Use colors that trigger purchasing decisions and genre expectations
-        4. **Professional Quality:** Match the visual quality of top-performing Amazon books
-        5. **Market Differentiation:** Stand out while fitting genre conventions
+        3. **Color Psychology:** Use colors that trigger purchasing decisions and match the topic of "${title}"
+        4. **Professional Quality:** Match the visual quality of top-performing Amazon books in this specific topic area
+        5. **Market Differentiation:** Stand out while fitting the conventions of books about "${title}"
         6. **Logo Placement:** Reserve bottom-left corner space for "eMMeRReKDP" logo
+        7. **Topic Relevance:** All visual elements must be relevant to "${title}" and its subject matter
 
         **ABSOLUTE CONSTRAINTS:**
         - DO NOT include any text, titles, or letters in the design
-        - Focus on symbolic, conceptual imagery that supports the book's theme
+        - Focus on symbolic, conceptual imagery that specifically supports "${title}" and its themes
         - Create designs that work for both print and digital formats
         - Generate four completely different visual concepts
-        - Each design must be immediately recognizable as a professional book cover`;
+        - Each design must be immediately recognizable as a professional book cover about "${title}"
+        - Visual elements should appeal to people interested in "${title}"`;
 
         const response = await ai.models.generateImages({
             model: 'imagen-4.0-generate-001',

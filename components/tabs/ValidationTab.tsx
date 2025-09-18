@@ -28,6 +28,8 @@ const ValidationItem: React.FC<{ result: ValidationResult }> = ({ result }) => {
 const ValidationTab: React.FC = () => {
   const { 
     projectTitle, 
+    researchData,
+    selectedSources,
     subtitle, 
     author, 
     description, 
@@ -41,6 +43,19 @@ const ValidationTab: React.FC = () => {
   const validationResults: ValidationResult[] = useMemo(() => {
     const results: ValidationResult[] = [];
 
+    // Research phase validation
+    results.push({ 
+      isValid: !!researchData, 
+      message: "Ricerca Completata", 
+      details: researchData ? `Trovate ${researchData.sources.length} fonti, ${researchData.titles.length} titoli, ${researchData.keywords.length} keywords` : "Esegui una ricerca nella scheda 'Ricerca'"
+    });
+    
+    results.push({ 
+      isValid: selectedSources.length > 0, 
+      message: "Fonti Selezionate per il Contenuto", 
+      details: selectedSources.length > 0 ? `${selectedSources.length} fonti selezionate per la generazione dei contenuti` : "Seleziona almeno una fonte nella scheda 'Ricerca'"
+    });
+
     // Metadata checks
     results.push({ isValid: !!projectTitle.trim(), message: "Titolo del Progetto Definito" });
     results.push({ isValid: !!subtitle.trim(), message: "Sottotitolo Presente" });
@@ -53,7 +68,11 @@ const ValidationTab: React.FC = () => {
     results.push({ isValid: !!coverImage, message: "Copertina Selezionata" });
     
     // Structure & Content check
-    results.push({ isValid: !!bookStructure, message: "Struttura del Libro Generata" });
+    results.push({ 
+      isValid: !!bookStructure, 
+      message: "Struttura del Libro Generata",
+      details: bookStructure ? `${bookStructure.chapters.length} capitoli con ${bookStructure.chapters.reduce((acc, ch) => acc + ch.subchapters.length, 0)} sottocapitoli` : "Genera la struttura nella scheda 'Struttura'"
+    });
 
     if (bookStructure) {
       const allItems = bookStructure.chapters.flatMap(ch => [ch, ...ch.subchapters]);
@@ -89,9 +108,14 @@ const ValidationTab: React.FC = () => {
     }
 
     return results;
-  }, [projectTitle, subtitle, author, description, metadataKeywords, categories, coverImage, bookStructure, chapterContents]);
+  }, [projectTitle, researchData, selectedSources, subtitle, author, description, metadataKeywords, categories, coverImage, bookStructure, chapterContents]);
 
   const isFullyValid = useMemo(() => validationResults.every(r => r.isValid), [validationResults]);
+  
+  const completionPercentage = useMemo(() => {
+    const validCount = validationResults.filter(r => r.isValid).length;
+    return Math.round((validCount / validationResults.length) * 100);
+  }, [validationResults]);
 
   return (
     <Card>
@@ -99,6 +123,19 @@ const ValidationTab: React.FC = () => {
       <p className="text-gray-600 mb-6">
         Controlla lo stato di avanzamento del tuo progetto. Assicurati che tutti i punti siano validi prima di procedere all'esportazione.
       </p>
+      
+      <div className="mb-6 p-4 bg-gray-50 rounded-lg">
+        <div className="flex justify-between items-center mb-2">
+          <span className="font-medium">Completamento Progetto</span>
+          <span className="font-bold text-lg">{completionPercentage}%</span>
+        </div>
+        <div className="w-full bg-gray-200 rounded-full h-3">
+          <div 
+            className={`h-3 rounded-full transition-all duration-500 ${completionPercentage === 100 ? 'bg-green-500' : completionPercentage >= 75 ? 'bg-blue-500' : completionPercentage >= 50 ? 'bg-yellow-500' : 'bg-red-500'}`}
+            style={{ width: `${completionPercentage}%` }}
+          ></div>
+        </div>
+      </div>
 
       {isFullyValid ? (
           <div className="p-4 border-l-4 border-green-500 bg-green-50 text-center">

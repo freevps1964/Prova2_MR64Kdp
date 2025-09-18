@@ -18,8 +18,12 @@ const StructureTab: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleGenerateStructure = async () => {
-    if (!projectTitle || selectedSources.length === 0) {
-      alert("Seleziona un titolo e almeno una fonte di ricerca prima di generare la struttura.");
+    if (!projectTitle.trim()) {
+      alert("Seleziona un titolo prima di generare la struttura.");
+      return;
+    }
+    if (selectedSources.length === 0) {
+      alert("Seleziona almeno una fonte di ricerca nella scheda 'Ricerca' prima di generare la struttura.");
       return;
     }
     setIsLoading(true);
@@ -71,13 +75,14 @@ const StructureTab: React.FC = () => {
           </p>
           <button
             onClick={handleGenerateStructure}
-            disabled={isLoading || !projectTitle || selectedSources.length === 0}
+            disabled={isLoading || !projectTitle.trim() || selectedSources.length === 0}
             className="w-full bg-brand-primary text-white font-bold py-3 px-6 rounded-lg shadow-md hover:bg-brand-secondary transition duration-300 disabled:bg-gray-400 disabled:cursor-not-allowed"
           >
             {isLoading ? <Spinner /> : 'Genera Sommario'}
           </button>
-           {!projectTitle && <p className="text-red-500 text-xs mt-2">Seleziona un titolo per continuare.</p>}
-           {projectTitle && selectedSources.length === 0 && <p className="text-red-500 text-xs mt-2">Seleziona almeno una fonte nella scheda 'Ricerca'.</p>}
+           {!projectTitle.trim() && <p className="text-red-500 text-xs mt-2">Seleziona un titolo per continuare.</p>}
+           {projectTitle.trim() && selectedSources.length === 0 && <p className="text-red-500 text-xs mt-2">Seleziona almeno una fonte nella scheda 'Ricerca'.</p>}
+           {selectedSources.length > 0 && <p className="text-green-600 text-xs mt-2">✓ {selectedSources.length} fonti selezionate</p>}
         </Card>
       </div>
 

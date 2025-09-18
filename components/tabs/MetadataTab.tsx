@@ -7,6 +7,7 @@ import { XIcon } from '../common/Icons';
 const MetadataTab: React.FC = () => {
   const {
     projectTitle,
+    researchData,
     subtitle, setSubtitle,
     author, setAuthor,
     description, setDescription,
@@ -27,12 +28,56 @@ const MetadataTab: React.FC = () => {
   const handleRemoveKeyword = (keywordToRemove: string) => {
     setMetadataKeywords(metadataKeywords.filter(kw => kw.keyword !== keywordToRemove));
   };
+
+  const handleAutoFillFromResearch = () => {
+    if (!researchData) {
+      alert("Esegui prima una ricerca nella scheda 'Ricerca' per ottenere suggerimenti automatici.");
+      return;
+    }
+    
+    // Auto-fill subtitle from research
+    if (!subtitle.trim() && researchData.subtitles && researchData.subtitles.length > 0) {
+      setSubtitle(researchData.subtitles[0].subtitle);
+    }
+    
+    // Auto-fill description
+    if (!description.trim() && researchData.keywords.length > 0) {
+      const topKeywords = researchData.keywords.slice(0, 5).map(k => k.keyword).join(', ');
+      const autoDescription = `Una guida completa e pratica su ${topKeywords}. Questo libro fornisce strategie comprovate, tecniche avanzate e consigli pratici per ottenere risultati concreti. Ideale per chi vuole approfondire l'argomento e applicare immediatamente le conoscenze acquisite per raggiungere il successo.`;
+      setDescription(autoDescription);
+    }
+    
+    // Merge research keywords with existing ones
+    if (researchData.keywords.length > 0) {
+      const existingKeywords = metadataKeywords.map(k => k.keyword.toLowerCase());
+      const newKeywords = researchData.keywords.filter(k => !existingKeywords.includes(k.keyword.toLowerCase()));
+      setMetadataKeywords([...metadataKeywords, ...newKeywords]);
+    }
+  };
   
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
       <div className="lg:col-span-2">
         <Card>
           <h1 className="text-2xl font-bold mb-6">Gestione Metadati KDP</h1>
+          
+          {researchData && (
+            <div className="mb-6 p-4 bg-blue-50 rounded-lg">
+              <div className="flex justify-between items-center">
+                <div>
+                  <p className="text-sm text-blue-800 font-medium">Dati di ricerca disponibili</p>
+                  <p className="text-xs text-blue-600">Compila automaticamente i metadati con i risultati della ricerca</p>
+                </div>
+                <button
+                  onClick={handleAutoFillFromResearch}
+                  className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition"
+                >
+                  Auto-Compila
+                </button>
+              </div>
+            </div>
+          )}
+          
           <div className="space-y-6">
             <div>
               <label htmlFor="projectTitle" className="block text-sm font-medium text-gray-700">Titolo del Libro</label>
@@ -84,6 +129,9 @@ const MetadataTab: React.FC = () => {
       <div className="lg:col-span-1 space-y-8">
         <Card>
           <h2 className="text-xl font-bold mb-4">Parole Chiave (Keywords)</h2>
+          <p className="text-sm text-gray-600 mb-4">
+            {metadataKeywords.length}/7 keywords (Amazon raccomanda 5-7 keywords)
+          </p>
           <div className="flex gap-2 mb-4">
             <input 
               type="text"
@@ -95,6 +143,28 @@ const MetadataTab: React.FC = () => {
             />
             <button onClick={handleAddKeyword} className="bg-brand-light text-white font-bold py-2 px-3 rounded-lg hover:bg-brand-secondary transition">+</button>
           </div>
+          
+          {researchData && researchData.keywords.length > 0 && (
+            <div className="mb-4 p-3 bg-gray-50 rounded-lg">
+              <p className="text-sm font-medium text-gray-700 mb-2">Keywords suggerite dalla ricerca:</p>
+              <div className="flex flex-wrap gap-1">
+                {researchData.keywords.slice(0, 10).map(kw => (
+                  <button
+                    key={kw.keyword}
+                    onClick={() => {
+                      if (!metadataKeywords.some(mk => mk.keyword === kw.keyword)) {
+                        setMetadataKeywords([...metadataKeywords, kw]);
+                      }
+                    }}
+                    className="text-xs bg-white border border-gray-300 text-gray-700 px-2 py-1 rounded hover:bg-blue-50 hover:border-blue-300 transition"
+                  >
+                    + {kw.keyword}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+          
           <div className="flex flex-wrap gap-2">
             {metadataKeywords.map(kw => (
               <div key={kw.keyword} className="bg-blue-100 text-brand-dark text-sm font-medium px-3 py-1 rounded-full flex items-center gap-2">
